@@ -15,27 +15,34 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.recyclerview.extensions.ListAdapter;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.List;
+
 
 public class SongList extends AppCompatActivity {
 
+    public ArrayList<String> songInfo;
+    public ArrayList<String> filePathList;
+
     private static final int MY_PERMISSION_REQUEST = 1;
 
-    ArrayList<String> songInfo;
-    ArrayList<String> filePathList;
-    ListView listView;
 
-    ArrayAdapter<String> adapter;
+
+    RecyclerView recyclerView = findViewById(R.id.listView); //po zamianie listview na recyclerview w layoucie
 
     //zmienne do polaczenia z usluga
     private PlayerService playerService;
     private Intent playIntent;
     private boolean playerBound = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,19 +79,30 @@ public class SongList extends AppCompatActivity {
     }
 
     public void Cool(){
-        listView = (ListView) findViewById(R.id.listView);
+
+        recyclerView = findViewById(R.id.listView);
+
         songInfo = new ArrayList<>();
         filePathList = new ArrayList<>();
+
         getMusic();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, songInfo);
-        listView.setAdapter(adapter);
+        recyclerView.setAdapter(new SongListAdapter(this, songInfo));
+         //tu jest problem, dla recyclerView adapter nie może być stringiem,
+                                          //chyba trzeba będzie stworzyć nową klasę z adapterem i przekazać go tutaj
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this)); //bez odpowiedniego adaptera to nie zadziała
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) { //tej metody nie ma w recyclerView
                 playerService.setFilePath(filePathList);
                 playerService.setSongId(position);
                 playerService.playSong();
+
+
+
+
               // Intent myIntent = new Intent(getApplicationContext(), Player.class);
                 //myIntent.putExtra("id", position);
                 //myIntent.putExtra("filePath", filePathList);
@@ -160,4 +178,3 @@ public class SongList extends AppCompatActivity {
         }
     };
 }
-
