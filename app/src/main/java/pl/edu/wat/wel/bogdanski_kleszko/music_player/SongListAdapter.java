@@ -8,36 +8,41 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHolder> {
 
-    private List<SongList> piosenki;
-    private Context context;
+    private List<SongInfo> piosenki;
 
-    public SongListAdapter(Context context, List<SongList> piosenki) {
 
-        this.context = context;
+    public SongListAdapter(List<SongInfo> piosenki) {
         this.piosenki = piosenki;
-
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(
-                LayoutInflater.from(context)
-                .inflate(R.layout.song_list_activity, parent, false));
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+        View rowView = inflater.inflate(R.layout.song_list_activity,parent, false);
+        SongListAdapter.ViewHolder viewHolder = new SongListAdapter.ViewHolder(rowView);
+
+        return viewHolder;
+    }
+
+    public void setSongs(List<SongInfo> piosenki){
+        this.piosenki = piosenki;
+        notifyDataSetChanged();
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SongListAdapter.ViewHolder holder, int position) {
 
-        //TODO Jak juz mamy listę piosenek (patrz wyżej), tu ustawiamy metodą setText() nazwę i autora
-
-        holder.
-        holder.
+        holder.title.setText(piosenki.get(position).tytul);
+        holder.author.setText(piosenki.get(position).autor);
+        holder.info.setText(piosenki.get(position).info);
     }
 
     @Override
@@ -45,12 +50,16 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
         return this.piosenki.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView ; //z holdera wyciągamy tu te same zmienne, których używamy przy piosenkach (nazwa, autor)
-        private TextView ;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView title;
+        public TextView author;
+        public TextView info;
 
-        public ViewHolder(@NonNull View view) {
-            super(view);
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            title = itemView.findViewById(R.id.tytul);
+            author = itemView.findViewById(R.id.autor);
 
         }
     }

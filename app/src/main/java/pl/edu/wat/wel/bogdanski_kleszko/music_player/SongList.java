@@ -29,12 +29,9 @@ import java.util.List;
 
 public class SongList extends AppCompatActivity {
 
-    public ArrayList<String> songInfo;
-    public ArrayList<String> filePathList;
-
     private static final int MY_PERMISSION_REQUEST = 1;
 
-
+    public List<SongInfo> lista;
 
     RecyclerView recyclerView = findViewById(R.id.listView); //po zamianie listview na recyclerview w layoucie
 
@@ -78,45 +75,33 @@ public class SongList extends AppCompatActivity {
         }
     }
 
+    private SongListAdapter sAdapter;
+
     public void Cool(){
 
+
+        //?????????????????????????? Nie wiem czy zadziała w ten sposób, jutro zobaczymy, tam na dole filepathlist już nie będzie
         recyclerView = findViewById(R.id.listView);
 
-        songInfo = new ArrayList<>();
-        filePathList = new ArrayList<>();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         getMusic();
-        recyclerView.setAdapter(new SongListAdapter(this, songInfo));
-         //tu jest problem, dla recyclerView adapter nie może być stringiem,
-                                          //chyba trzeba będzie stworzyć nową klasę z adapterem i przekazać go tutaj
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this)); //bez odpowiedniego adaptera to nie zadziała
+        sAdapter = new SongListAdapter(lista);
+        recyclerView.setAdapter(sAdapter);
 
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) { //tej metody nie ma w recyclerView
-                playerService.setFilePath(filePathList);
-                playerService.setSongId(position);
-                playerService.playSong();
+        }
 
-
-
-
-              // Intent myIntent = new Intent(getApplicationContext(), Player.class);
-                //myIntent.putExtra("id", position);
-                //myIntent.putExtra("filePath", filePathList);
-                //myIntent.putExtra("songInfo", songInfo); //przekazuje liste z info o utworze
-               // SongList.this.startActivity(myIntent);
-            }
-        });
-    }
 
 
     public void getMusic() {
         ContentResolver contentResolver = getContentResolver();
         Uri songUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor songCursor = contentResolver.query(songUri, null, null, null, null);
+
+        SongInfo songinfo = new SongInfo();
 
         if(songCursor != null && songCursor.moveToFirst()) {
             int tytul = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
@@ -128,8 +113,9 @@ public class SongList extends AppCompatActivity {
                 String currentTitle = songCursor.getString(tytul);
                 String currentArtist = songCursor.getString(wykonawca);
                 String currentFilePath = songCursor.getString(filepath);
-                songInfo.add((currentTitle + "\n" + currentArtist));
-                filePathList.add((currentFilePath)); //zapisuje na liscie dane o filepath
+                songinfo.autor = currentArtist;
+                songinfo.tytul = currentTitle;
+                songinfo.info = currentFilePath;//zapisuje na liscie dane o filepath
 
             } while (songCursor.moveToNext());
         }
