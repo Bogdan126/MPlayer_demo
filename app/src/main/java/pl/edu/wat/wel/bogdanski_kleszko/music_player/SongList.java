@@ -31,9 +31,7 @@ public class SongList extends AppCompatActivity {
 
     private static final int MY_PERMISSION_REQUEST = 1;
 
-    public List<SongInfo> lista;
-
-    RecyclerView recyclerView = findViewById(R.id.listView); //po zamianie listview na recyclerview w layoucie
+    public List<SongInfo> lista = new ArrayList<>();
 
     //zmienne do polaczenia z usluga
     private PlayerService playerService;
@@ -79,9 +77,9 @@ public class SongList extends AppCompatActivity {
 
     public void Cool(){
 
+        RecyclerView recyclerView = findViewById(R.id.RecyclerView);
 
-        //?????????????????????????? Nie wiem czy zadziała w ten sposób, jutro zobaczymy, tam na dole filepathlist już nie będzie
-        recyclerView = findViewById(R.id.listView);
+        recyclerView = findViewById(R.id.RecyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -101,7 +99,6 @@ public class SongList extends AppCompatActivity {
         Uri songUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor songCursor = contentResolver.query(songUri, null, null, null, null);
 
-        SongInfo songinfo = new SongInfo();
 
         if(songCursor != null && songCursor.moveToFirst()) {
             int tytul = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
@@ -110,14 +107,18 @@ public class SongList extends AppCompatActivity {
 
 
             do {
+                SongInfo songInfo = new SongInfo();
                 String currentTitle = songCursor.getString(tytul);
                 String currentArtist = songCursor.getString(wykonawca);
                 String currentFilePath = songCursor.getString(filepath);
-                songinfo.autor = currentArtist;
-                songinfo.tytul = currentTitle;
-                songinfo.info = currentFilePath;//zapisuje na liscie dane o filepath
+                songInfo.autor = currentArtist;
+                songInfo.tytul = currentTitle;
+                songInfo.info = currentFilePath;
+                lista.add(songInfo);
+                //zapisuje na liscie dane o filepath
 
             } while (songCursor.moveToNext());
+            songCursor.close();
         }
     }
 
@@ -137,7 +138,7 @@ public class SongList extends AppCompatActivity {
                     Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
                     finish();
                 }
-                return;
+
             }
         }
 
@@ -153,7 +154,7 @@ public class SongList extends AppCompatActivity {
 
             playerService = binder.getService();
 
-            playerService.setFilePath(filePathList);
+            //playerService.setFilePath(filePathList);
             playerBound = true;
         }
 

@@ -8,14 +8,20 @@
 
 
     <TextView
-        android:id="@+id/tytul"
+        android:id="@+id/tytulpiosenki"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/autor"
+        android:id="@+id/autorpiosenki"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tytul"/>
+        android:layout_below="@+id/tytulpiosenki"/>
+
+    <TextView
+        android:id="@+id/informacje"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/autorpiosenki" />
 
 </RelativeLayout>
