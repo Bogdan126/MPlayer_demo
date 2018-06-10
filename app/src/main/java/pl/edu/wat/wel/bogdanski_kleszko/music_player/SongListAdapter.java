@@ -29,13 +29,11 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        View rowView = inflater.inflate(R.layout.song_list_activity,parent, false);
+        View rowView = inflater.inflate(R.layout.song_info,parent, false);
         SongListAdapter.ViewHolder viewHolder = new SongListAdapter.ViewHolder(rowView);
 
         return viewHolder;
     }
-
-
 
     @Override
     public void onBindViewHolder(@NonNull SongListAdapter.ViewHolder holder, int position) {
@@ -53,10 +51,10 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView title; //??????????????????????????????
-        private TextView author;
+        public TextView author;
         public TextView info;
 
-        private ViewHolder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
 
             title = itemView.findViewById(R.id.tytulpiosenki); //?????????????????????????
