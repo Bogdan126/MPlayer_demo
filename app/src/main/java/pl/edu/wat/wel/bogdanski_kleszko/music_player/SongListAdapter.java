@@ -1,5 +1,6 @@
 package pl.edu.wat.wel.bogdanski_kleszko.music_player;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +42,16 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
         holder.title.setText(piosenki.get(position).getTytul());
         holder.author.setText(piosenki.get(position).getAutor());
         holder.info.setText(piosenki.get(position).getInfo());
+
+        //TUTAJ JEST ONCLICK
+        holder.title.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(),Player.class);
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
