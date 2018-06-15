@@ -42,7 +42,6 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
         holder.title.setText(piosenki.get(position).getTytul());
         holder.author.setText(piosenki.get(position).getAutor());
         holder.info.setText(piosenki.get(position).getInfo());
-
         //TUTAJ JEST ONCLICK
         holder.title.setOnClickListener(new View.OnClickListener()
         {
